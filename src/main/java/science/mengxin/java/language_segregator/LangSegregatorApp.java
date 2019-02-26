@@ -4,10 +4,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class LanguageSegregatorApplication {
+public class LangSegregatorApp {
 
     public static void main(String[] args) {
-        SpringApplication.run(LanguageSegregatorApplication.class, args);
+        SpringApplication.run(LangSegregatorApp.class, args);
     }
 
 }
