@@ -1,4 +1,4 @@
-package science.mengxin.java.language_segregator.model;
+package science.mengxin.java.language_segregator.model.options;
 
 public class DocOptions {
 
@@ -32,5 +32,15 @@ public class DocOptions {
 
   public String getBlockSeparatorStr() {
     return blockSeparatorStr;
+  }
+
+  @Override
+  public String toString() {
+    return "DocOptions{" +
+        "supportTitle=" + supportTitle +
+        ", supportMapping=" + supportMapping +
+        ", blockSeparator=" + blockSeparator +
+        ", blockSeparatorStr='" + blockSeparatorStr + '\'' +
+        '}';
   }
 }

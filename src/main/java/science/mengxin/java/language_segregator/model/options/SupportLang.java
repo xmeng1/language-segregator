@@ -1,4 +1,4 @@
-package science.mengxin.java.language_segregator.model;
+package science.mengxin.java.language_segregator.model.options;
 
 import com.neovisionaries.i18n.LanguageAlpha3Code;
 import com.neovisionaries.i18n.LanguageCode;

@@ -1,4 +1,4 @@
-package science.mengxin.java.language_segregator.model;
+package science.mengxin.java.language_segregator.model.options;
 
 public class TitlePatternOptions {
 
@@ -59,5 +59,19 @@ public class TitlePatternOptions {
 
   public String getSpecialSubString() {
     return specialSubString;
+  }
+
+  @Override
+  public String toString() {
+    return "TitlePatternOptions{" +
+        "filterByLang=" + filterByLang +
+        ", lang=" + lang +
+        ", filterByCase=" + filterByCase +
+        ", allUpperCase=" + allUpperCase +
+        ", filterByLength=" + filterByLength +
+        ", lengthThreshold=" + lengthThreshold +
+        ", filterBySubString=" + filterBySubString +
+        ", specialSubString='" + specialSubString + '\'' +
+        '}';
   }
 }
