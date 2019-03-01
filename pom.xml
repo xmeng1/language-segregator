@@ -73,6 +73,13 @@
             <scope>system</scope>
             <systemPath>${project.basedir}/lib/language-detection.jar</systemPath>
         </dependency>
+
+
+        <dependency>
+            <groupId>com.neovisionaries</groupId>
+            <artifactId>nv-i18n</artifactId>
+            <version>1.24</version>
+        </dependency>
     </dependencies>
 
     <build>

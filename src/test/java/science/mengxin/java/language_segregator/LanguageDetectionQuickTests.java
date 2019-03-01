@@ -7,6 +7,8 @@ import com.detectlanguage.DetectLanguage;
 import com.detectlanguage.Result;
 import com.detectlanguage.errors.APIError;
 import com.google.common.base.Optional;
+import com.neovisionaries.i18n.LanguageCode;
+import com.neovisionaries.i18n.LocaleCode;
 import com.optimaize.langdetect.LanguageDetector;
 import com.optimaize.langdetect.LanguageDetectorBuilder;
 import com.optimaize.langdetect.i18n.LdLocale;
@@ -34,7 +36,7 @@ public class LanguageDetectionQuickTests {
     /**
      * https://github.com/optimaize/language-detector
      *
-     * @throws IOException  IOException
+     * @throws IOException IOException
      */
     @Test
     public void languageDetectTest() throws IOException {
@@ -59,7 +61,7 @@ public class LanguageDetectionQuickTests {
         Optional<LdLocale> lang = languageDetector.detect(textObject);
         if (lang.isPresent()) {
             System.out.println(lang.get().toString());
-        }else {
+        } else {
             System.out.println("cannot get the result");
         }
     }
@@ -87,7 +89,7 @@ public class LanguageDetectionQuickTests {
         Optional<LdLocale> lang = languageDetector.detect(textObject);
         if (lang.isPresent()) {
             System.out.println(lang.get().toString());
-        }else {
+        } else {
             System.out.println("cannot get the result");
         }
     }
@@ -95,6 +97,7 @@ public class LanguageDetectionQuickTests {
     /**
      * https://detectlanguage.com/
      * https://github.com/detectlanguage/detectlanguage-java
+     *
      * @throws IOException
      */
     @Test
@@ -149,6 +152,18 @@ public class LanguageDetectionQuickTests {
         String lang = detector.detect();
 
         System.out.println(lang);
+    }
+
+    @Test
+    public void listLanguageTest() {
+        for (LanguageCode code : LanguageCode.values()) {
+      // For example, "[ar] Arabic" is printed.</span>
+                    System.out.format("[%s] %s\n"  , code, code.getName());
+        }
+
+        for(LocaleCode localeCode: LocaleCode.values()) {
+            System.out.format("[%s] %s %s\n"  , localeCode, localeCode.getCountry(), localeCode.getLanguage());
+        }
     }
 
 }

@@ -6,8 +6,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class LangSegregatorApp {
 
-    public static void main(String[] args) {
-        SpringApplication.run(LangSegregatorApp.class, args);
-    }
+  public static void main(String[] args) {
+    SpringApplication.run(LangSegregatorApp.class, args);
+  }
 
 }
