@@ -1,41 +1,54 @@
 package science.mengxin.java.language_segregator.model;
 
 import java.util.List;
+import java.util.Map;
 import science.mengxin.java.language_segregator.model.options.SupportLang;
 
 public class SegItem {
-  private SupportLang supportLang;
-  private List<String> contents;
+
+  private SupportLang language;
+  private List<Integer> titleSeqNums;
+  private Map<Integer, String> contents;
 
   public SegItem() {
   }
 
-  public SegItem(SupportLang supportLang, List<String> contents) {
-    this.supportLang = supportLang;
+  public SegItem(SupportLang language, List<Integer> titleSeqNums,
+      Map<Integer, String> contents) {
+    this.language = language;
+    this.titleSeqNums = titleSeqNums;
     this.contents = contents;
   }
 
-  public SupportLang getSupportLang() {
-    return supportLang;
+  public SupportLang getLanguage() {
+    return language;
   }
 
-  public void setSupportLang(
-      SupportLang supportLang) {
-    this.supportLang = supportLang;
+  public void setLanguage(
+      SupportLang language) {
+    this.language = language;
   }
 
-  public List<String> getContents() {
+  public Map<Integer, String> getContents() {
     return contents;
   }
 
-  public void setContents(List<String> contents) {
+  public void setContents(Map<Integer, String> contents) {
     this.contents = contents;
+  }
+
+  public List<Integer> getTitleSeqNums() {
+    return titleSeqNums;
+  }
+
+  public void setTitleSeqNums(List<Integer> titleSeqNums) {
+    this.titleSeqNums = titleSeqNums;
   }
 
   @Override
   public String toString() {
     return "SegItem{" +
-        "supportLang=" + supportLang +
+        "language=" + language +
         ", contents=" + contents +
         '}';
   }

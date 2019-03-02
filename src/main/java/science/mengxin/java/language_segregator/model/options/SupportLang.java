@@ -3,6 +3,7 @@ package science.mengxin.java.language_segregator.model.options;
 import com.neovisionaries.i18n.LanguageAlpha3Code;
 import com.neovisionaries.i18n.LanguageCode;
 import com.neovisionaries.i18n.LocaleCode;
+import java.util.function.Supplier;
 
 public enum SupportLang {
   AF(0, null, LanguageCode.af, null, null),
@@ -76,6 +77,7 @@ public enum SupportLang {
   AST(1, null, null, LanguageAlpha3Code.ast, null),
   ZH_CN(2, null, null, null, LocaleCode.zh_CN),
   ZH_TW(2, null, null, null, LocaleCode.zh_TW);
+  // ZH_TW support not too good and easy confuse with ko
 
   private final String code;          // Short code
   private final String description;   // English Description
@@ -127,4 +129,6 @@ public enum SupportLang {
   public LocaleCode getLocaleCode() {
     return localeCode;
   }
+
+
 }

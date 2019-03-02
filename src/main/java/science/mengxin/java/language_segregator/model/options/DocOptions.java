@@ -4,18 +4,18 @@ public class DocOptions {
 
   private Boolean supportTitle = true;
   private Boolean supportMapping = true;
-  private BlockSeparator blockSeparator = BlockSeparator.BLANK_LINE;
-  private String blockSeparatorStr; // if BlockSeparator.SPECIAL_STRING
+  private BlockSeparator blockSeparator = BlockSeparator.LINE_BREAK;
+  private String blockSeparatorRex; // if BlockSeparator.REGEX_EXPRESS
 
   public DocOptions() {
   }
 
   public DocOptions(Boolean supportTitle, Boolean supportMapping,
-      BlockSeparator blockSeparator, String blockSeparatorStr) {
+      BlockSeparator blockSeparator, String blockSeparatorRex) {
     this.supportTitle = supportTitle;
     this.supportMapping = supportMapping;
     this.blockSeparator = blockSeparator;
-    this.blockSeparatorStr = blockSeparatorStr;
+    this.blockSeparatorRex = blockSeparatorRex;
   }
 
   public Boolean getSupportTitle() {
@@ -30,8 +30,8 @@ public class DocOptions {
     return blockSeparator;
   }
 
-  public String getBlockSeparatorStr() {
-    return blockSeparatorStr;
+  public String getBlockSeparatorRex() {
+    return blockSeparatorRex;
   }
 
   @Override
@@ -40,7 +40,7 @@ public class DocOptions {
         "supportTitle=" + supportTitle +
         ", supportMapping=" + supportMapping +
         ", blockSeparator=" + blockSeparator +
-        ", blockSeparatorStr='" + blockSeparatorStr + '\'' +
+        ", blockSeparatorRex='" + blockSeparatorRex + '\'' +
         '}';
   }
 }
