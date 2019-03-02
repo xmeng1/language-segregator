@@ -2,6 +2,7 @@ package science.mengxin.java.language_segregator;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
 import org.apache.tika.Tika;
 import org.apache.tika.exception.TikaException;
 import org.apache.tika.metadata.Metadata;
@@ -17,7 +18,7 @@ public class DocumentQuickTest {
   static final String docRootPath = "/documents/";
   static final String doc1Name = "multi_lang_doc";
   static final String pdfExt = ".pdf";
-  static final String rtfExt = ".trf";
+  static final String rtfExt = ".rtf";
   static final String docxExt = ".docx";
   static final String odtExt = ".odt";
   static final String markdownExt = ".md";
@@ -35,6 +36,22 @@ public class DocumentQuickTest {
 
     String result1 = tika.parseToString(stream);
     System.out.println(result1);
+  }
+
+  @Test
+  public void rtfDocAndSplitTest() throws IOException, TikaException {
+    InputStream stream = DocumentQuickTest.class
+        .getResourceAsStream(doc1FullPath + rtfExt);
+
+    // Parsing using the Tika Facade
+    Tika tika = new Tika();
+
+    String result1 = tika.parseToString(stream);
+
+    String[] splitResult = result1.split("\\n\\n");
+
+    System.out.println(splitResult.length);
+    System.out.println(Arrays.toString(splitResult));
   }
 
   @Test
