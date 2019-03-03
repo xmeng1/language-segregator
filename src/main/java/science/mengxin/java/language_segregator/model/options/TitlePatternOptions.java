@@ -2,14 +2,21 @@ package science.mengxin.java.language_segregator.model.options;
 
 public class TitlePatternOptions {
 
-  private Boolean filterByLang = true;
+  // filter, if match continue, or return false
+  private Boolean filterByLang = false;
   private SupportLang lang = SupportLang.EN;
+
+  // First Priority
   private Boolean filterByCase = true;
   private Boolean allUpperCase = true;
+
+  // Second Priority
   private Boolean filterByLength = false;
-  private Integer lengthThreshold;
-  private Boolean filterBySubString = false;
-  private String specialSubString;
+  private Integer lengthThreshold = 50;
+
+  // Third Priority
+  private Boolean filterByRegex = false;
+  private String regexPattern = "";
 
   public TitlePatternOptions() {
 
@@ -17,16 +24,16 @@ public class TitlePatternOptions {
 
   public TitlePatternOptions(Boolean filterByLang, SupportLang lang, Boolean filterByCase,
       Boolean allUpperCase,
-      Boolean filterByLength, Integer lengthThreshold, Boolean filterBySubString,
-      String specialSubString) {
+      Boolean filterByLength, Integer lengthThreshold, Boolean filterByRegex,
+      String regexPattern) {
     this.filterByLang = filterByLang;
     this.lang = lang;
     this.filterByCase = filterByCase;
     this.allUpperCase = allUpperCase;
     this.filterByLength = filterByLength;
     this.lengthThreshold = lengthThreshold;
-    this.filterBySubString = filterBySubString;
-    this.specialSubString = specialSubString;
+    this.filterByRegex = filterByRegex;
+    this.regexPattern = regexPattern;
   }
 
   public Boolean getFilterByLang() {
@@ -53,12 +60,12 @@ public class TitlePatternOptions {
     return lengthThreshold;
   }
 
-  public Boolean getFilterBySubString() {
-    return filterBySubString;
+  public Boolean getFilterByRegex() {
+    return filterByRegex;
   }
 
-  public String getSpecialSubString() {
-    return specialSubString;
+  public String getRegexPattern() {
+    return regexPattern;
   }
 
   @Override
@@ -70,8 +77,8 @@ public class TitlePatternOptions {
         ", allUpperCase=" + allUpperCase +
         ", filterByLength=" + filterByLength +
         ", lengthThreshold=" + lengthThreshold +
-        ", filterBySubString=" + filterBySubString +
-        ", specialSubString='" + specialSubString + '\'' +
+        ", filterByRegex=" + filterByRegex +
+        ", regexPattern='" + regexPattern + '\'' +
         '}';
   }
 }

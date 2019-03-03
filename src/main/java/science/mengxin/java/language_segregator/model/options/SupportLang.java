@@ -6,6 +6,7 @@ import com.neovisionaries.i18n.LocaleCode;
 import java.util.function.Supplier;
 
 public enum SupportLang {
+  UNKNOWN(0, null, LanguageCode.undefined, null, null),
   AF(0, null, LanguageCode.af, null, null),
   AN(0, null, LanguageCode.an, null, null),
   AR(0, null, LanguageCode.ar, null, null),
