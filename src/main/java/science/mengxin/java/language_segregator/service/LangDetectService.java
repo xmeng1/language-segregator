@@ -8,6 +8,7 @@ public interface LangDetectService {
 
   public Optional<SupportLang> detect(String source);
   public Optional<SupportLang> detect(String source, Double minimalConfidence);
+  public Optional<SupportLang> remoteDetect(String source);
 
   Optional<SupportLang> adapterLang(LdLocale ldLocale);
 }

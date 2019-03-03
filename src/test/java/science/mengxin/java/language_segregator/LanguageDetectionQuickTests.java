@@ -212,6 +212,129 @@ public class LanguageDetectionQuickTests {
     System.out.println(lang);
   }
 
+  String small1 = "A new year a new me.";
+  String small2 = "APP: “Hello, Sir”";
+  String small3 = "چطوری؟";
+  String small4 = "سلام آق";
+  String small5 = "عالی";
+  String small6 = "DAVE: “Brilliant”";
+  String small7 = "نیل والنی: ";
+  String small8 = "بله  ";
+  String small9 = "DAVE: “Wow. Here we go” ";
+  String small10 = "MARCIE MILLER: “Yes”";
+  @Test
+  public void languageDetectSmallWithNormalShuyoTest() throws LangDetectException {
+    DetectorFactory
+        .loadProfile(LanguageDetectionQuickTests.class.getResource("/profiles").getPath());
+
+    Detector detector = DetectorFactory.create();
+    detector.append(small1);
+
+    String lang = detector.detect();
+
+    System.out.println(lang);
+  }
+  public String languageDetectShuyoTest(String source, boolean small) throws LangDetectException {
+    DetectorFactory.clear();
+    if (small) {
+      DetectorFactory
+          .loadProfile(LanguageDetectionQuickTests.class.getResource("/profiles.sm").getPath());
+    } else {
+      DetectorFactory
+          .loadProfile(LanguageDetectionQuickTests.class.getResource("/profiles").getPath());
+    }
+
+    Detector detector = DetectorFactory.create();
+    detector.append(source);
+    System.out.println(detector.getProbabilities().toString());
+    String lang = detector.detect();
+    return lang;
+  }
+  public String apiDetect(String source) throws IOException, APIError {
+    DetectLanguage.apiKey = "91ff5462776798ad617da86fdc6131aa";
+
+    // Enable secure mode (SSL) if passing sensitive information
+    // DetectLanguage.ssl = true;
+    List<Result> results = DetectLanguage.detect(source);
+
+    Result result = results.get(0);
+
+    System.out.println("Language: " + result.language);
+    System.out.println("Is reliable: " + result.isReliable);
+    System.out.println("Confidence: " + result.confidence);
+    return result.language;
+  }
+  @Test
+  public void languageDetectSmallShuyoTest() throws LangDetectException, IOException, APIError {
+//    DetectorFactory
+//        .loadProfile(LanguageDetectionQuickTests.class.getResource("/profiles.sm").getPath());
+//
+//    Detector detector = DetectorFactory.create();
+//    detector.append(small1);
+//    String lang = detector.detect();
+//    System.out.println(lang);
+    System.out.println(small1);
+    System.out.println(languageDetectShuyoTest(small1, true));
+    System.out.println(languageDetectShuyoTest(small1, false));
+    System.out.println(apiDetect(small1));
+
+    System.out.println("=========");
+    System.out.println(small2);
+    System.out.println(languageDetectShuyoTest(small2, true));
+    System.out.println(languageDetectShuyoTest(small2, false));
+    System.out.println(apiDetect(small2));
+
+    System.out.println("=========");
+    System.out.println(small3);
+    System.out.println(languageDetectShuyoTest(small3, true));
+    System.out.println(languageDetectShuyoTest(small3, false));
+    System.out.println(apiDetect(small3));
+
+    System.out.println("=========");
+    System.out.println(small4);
+    System.out.println(languageDetectShuyoTest(small4, true));
+    System.out.println(languageDetectShuyoTest(small4, false));
+    System.out.println(apiDetect(small4));
+
+    System.out.println("=========");
+    System.out.println(small5);
+    System.out.println(languageDetectShuyoTest(small5, true));
+    System.out.println(languageDetectShuyoTest(small5, false));
+    System.out.println(apiDetect(small5));
+
+    System.out.println("=========");
+    System.out.println(small6);
+    System.out.println(languageDetectShuyoTest(small6, true));
+    System.out.println(languageDetectShuyoTest(small6, false));
+    System.out.println(apiDetect(small6));
+
+    System.out.println("=========");
+    System.out.println(small7);
+    System.out.println(languageDetectShuyoTest(small7, true));
+    System.out.println(languageDetectShuyoTest(small7, false));
+    System.out.println(apiDetect(small7));
+
+    System.out.println("=========");
+    System.out.println(small8);
+    System.out.println(languageDetectShuyoTest(small8, true));
+    System.out.println(languageDetectShuyoTest(small8, false));
+    System.out.println(apiDetect(small8));
+
+    System.out.println("=========");
+    System.out.println(small9);
+    System.out.println(languageDetectShuyoTest(small9, true));
+    System.out.println(languageDetectShuyoTest(small9, false));
+    System.out.println(apiDetect(small9));
+
+    System.out.println("=========");
+    System.out.println(small10);
+    System.out.println(languageDetectShuyoTest(small10, true));
+    System.out.println(languageDetectShuyoTest(small10, false));
+    System.out.println(apiDetect(small10));
+
+
+  }
+
   @Test
   public void listLanguageTest() {
     for (LanguageCode code : LanguageCode.values()) {

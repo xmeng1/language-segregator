@@ -14,6 +14,8 @@ import org.springframework.web.multipart.MultipartFile;
 import science.mengxin.java.language_segregator.model.SegItem;
 import science.mengxin.java.language_segregator.model.SegRequest;
 import science.mengxin.java.language_segregator.model.basic.ResultList;
+import science.mengxin.java.language_segregator.model.options.DocOptions;
+import science.mengxin.java.language_segregator.model.options.TitlePatternOptions;
 import science.mengxin.java.language_segregator.service.DocumentService;
 import science.mengxin.java.language_segregator.service.SegregatorService;
 
@@ -49,6 +51,13 @@ public class SegregatorController {
       @RequestParam(value = "doc") MultipartFile doc) {
     String content = documentService.parseDoc(doc);
     logger.debug("api get doc \n {}", content);
+    if (config.getDocOptions() == null) {
+      config.setDocOptions(new DocOptions());
+    }
+    if (config.getTitlePatternOptions() == null) {
+      config.setTitlePatternOptions(new TitlePatternOptions());
+    }
+    config.setSource(content);
     return segregatorService.split(config);
   }
 }

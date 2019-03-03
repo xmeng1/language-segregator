@@ -7,17 +7,19 @@ import science.mengxin.java.language_segregator.model.options.SupportLang;
 public class SegItem {
 
   private SupportLang language;
-  private List<Integer> titleSeqNums;
+
   private Map<Integer, String> contents;
+  private Map<Integer, String> titles;
 
   public SegItem() {
   }
 
-  public SegItem(SupportLang language, List<Integer> titleSeqNums,
-      Map<Integer, String> contents) {
+
+  public SegItem(SupportLang language, Map<Integer, String> contents,
+      Map<Integer, String> titles) {
     this.language = language;
-    this.titleSeqNums = titleSeqNums;
     this.contents = contents;
+    this.titles = titles;
   }
 
   public SupportLang getLanguage() {
@@ -37,12 +39,12 @@ public class SegItem {
     this.contents = contents;
   }
 
-  public List<Integer> getTitleSeqNums() {
-    return titleSeqNums;
+  public Map<Integer, String> getTitles() {
+    return titles;
   }
 
-  public void setTitleSeqNums(List<Integer> titleSeqNums) {
-    this.titleSeqNums = titleSeqNums;
+  public void setTitles(Map<Integer, String> titles) {
+    this.titles = titles;
   }
 
   @Override
@@ -50,6 +52,7 @@ public class SegItem {
     return "SegItem{" +
         "language=" + language +
         ", contents=" + contents +
+        ", titles=" + titles +
         '}';
   }
 }

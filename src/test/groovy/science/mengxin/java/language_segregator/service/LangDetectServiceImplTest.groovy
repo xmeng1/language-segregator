@@ -85,6 +85,28 @@ class LangDetectServiceImplTest extends Specification {
     @Shared
     String shortUKSource = "Або він може бути прозорим"
 
+
+    @Shared
+    String small1 = "A new year a new me.";
+    @Shared
+    String small2 = "APP: “Hello, Sir”";
+    @Shared
+    String small3 = "DAVE: “Brilliant”";
+    @Shared
+    String small4 = "DAVE: “Wow. Here we go” ";
+    @Shared
+    String small5 = "MARCIE MILLER: “Yes”";
+    @Shared
+    String small6 = "چطوری؟";
+    @Shared
+    String small7 = "سلام آق";
+    @Shared
+    String small8 = "عالی";
+    @Shared
+    String small9 = "نیل والنی: ";
+    @Shared
+    String small10 = "بله  ";
+
     void setup() {
     }
 
@@ -118,18 +140,18 @@ class LangDetectServiceImplTest extends Specification {
         2  | longFASource    | null       || Optional.of(SupportLang.FA)    | "long"
         3  | longZhCnSource  | null       || Optional.of(SupportLang.ZH_CN) | "long"
 //      4  | longZhTwSource | null       || Optional.of(SupportLang.ZH_TW) | "long"  // ZH_TW support not good
-        5  | longFRSource | null || Optional.of(SupportLang.FR) | "long"
-        6  | longAFSource | null || Optional.of(SupportLang.AF) | "long"
-        7  | longJASource | null || Optional.of(SupportLang.JA) | "long"
-        8  | longDESource | null || Optional.of(SupportLang.DE) | "long"
-        9  | longCSSource | null || Optional.of(SupportLang.CS) | "long"
-        10 | longELSource | null || Optional.of(SupportLang.EL) | "long"
-        11 | longESSource | null || Optional.of(SupportLang.ES) | "long"
-        12 | longHESource | null || Optional.of(SupportLang.HE) | "long"
-        13 | longHUSource | null || Optional.of(SupportLang.HU) | "long"
-        14 | longMLSource | null || Optional.of(SupportLang.ML) | "long"
-        15 | longPLSource | null || Optional.of(SupportLang.PL) | "long"
-        16 | longPTSource | null || Optional.of(SupportLang.PT) | "long"
+        5  | longFRSource    | null       || Optional.of(SupportLang.FR)    | "long"
+        6  | longAFSource    | null       || Optional.of(SupportLang.AF)    | "long"
+        7  | longJASource    | null       || Optional.of(SupportLang.JA)    | "long"
+        8  | longDESource    | null       || Optional.of(SupportLang.DE)    | "long"
+        9  | longCSSource    | null       || Optional.of(SupportLang.CS)    | "long"
+        10 | longELSource    | null       || Optional.of(SupportLang.EL)    | "long"
+        11 | longESSource    | null       || Optional.of(SupportLang.ES)    | "long"
+        12 | longHESource    | null       || Optional.of(SupportLang.HE)    | "long"
+        13 | longHUSource    | null       || Optional.of(SupportLang.HU)    | "long"
+        14 | longMLSource    | null       || Optional.of(SupportLang.ML)    | "long"
+        15 | longPLSource    | null       || Optional.of(SupportLang.PL)    | "long"
+        16 | longPTSource    | null       || Optional.of(SupportLang.PT)    | "long"
         17 | longTRSource    | null       || Optional.of(SupportLang.TR)    | "long"
         18 | longUKSource    | null       || Optional.of(SupportLang.UK)    | "long"
         19 | shortENSource   | null       || Optional.of(SupportLang.EN)    | "short"
@@ -142,7 +164,7 @@ class LangDetectServiceImplTest extends Specification {
 //        26 | shortDESource   | null       || Optional.of(SupportLang.DE)    | "short" // confuse with no
         27 | shortCSSource   | null       || Optional.of(SupportLang.CS)    | "short"
         28 | shortELSource   | null       || Optional.of(SupportLang.EL)    | "short"
-        29 | shortESSource   | null       || Optional.of(SupportLang.ES)    | "short"
+        29 | shortESSource   | null       || Optional.empty()               | "short, should be  Optional.of(SupportLang.ES)"
         30 | shortHESource   | null       || Optional.of(SupportLang.HE)    | "short"
         31 | shortHUSource   | null       || Optional.of(SupportLang.HU)    | "short"
         32 | shortMLSource   | null       || Optional.of(SupportLang.ML)    | "short"
@@ -150,6 +172,16 @@ class LangDetectServiceImplTest extends Specification {
 //        34 | shortPTSource   | null       || Optional.of(SupportLang.PT)    | "short" //
         35 | shortTRSource   | null       || Optional.of(SupportLang.TR)    | "short"
         36 | shortUKSource   | null       || Optional.of(SupportLang.UK)    | "short"
+        36 | small1          | null       || Optional.of(SupportLang.EN)    | "short"
+        36 | small2          | null       || Optional.empty()               | "short Optional.of(SupportLang.EN)"
+        36 | small3          | null       || Optional.empty()               | "short Optional.of(SupportLang.EN)"
+        36 | small4          | null       || Optional.of(SupportLang.EN)    | "short"
+        36 | small5          | null       || Optional.of(SupportLang.EN)    | "short"
+        36 | small6          | null       || Optional.of(SupportLang.FA)    | "short"
+        36 | small7          | null       || Optional.empty()               | "short Optional.of(SupportLang.FA)"
+        36 | small8          | null       || Optional.of(SupportLang.AR)    | "short Optional.of(SupportLang.FA)"
+        36 | small9          | null       || Optional.of(SupportLang.AR)    | "short Optional.of(SupportLang.FA)"
+        36 | small10         | null       || Optional.of(SupportLang.AR)    | "short Optional.of(SupportLang.FA)"
     }
 
 

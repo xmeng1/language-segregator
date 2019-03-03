@@ -1,11 +1,14 @@
 package science.mengxin.java.language_segregator.service
 
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import science.mengxin.java.language_segregator.model.SegItem
 import science.mengxin.java.language_segregator.model.SegRequest
 import science.mengxin.java.language_segregator.model.basic.ResultList
 import science.mengxin.java.language_segregator.model.options.DocOptions
+import science.mengxin.java.language_segregator.model.options.SupportLang
 import science.mengxin.java.language_segregator.model.options.TitlePatternOptions
 import spock.lang.Shared
 import spock.lang.Specification
@@ -119,16 +122,55 @@ PIX TRANSPARENT DISPLAY
         7  | fragments[6] | defaultOption || false   | "default"
     }
 
+
+    @Shared
+    String special = " SOT NILS " +
+            "WOLLNY, He" +
+            "ad of Digi" +
+            "tal Busine" +
+            "ss, Audi: “" +
+            "What we ha" +
+            "ve created" +
+            ", basicall" +
+            "y, is a co" +
+            "mpletely n" +
+            "ew categor" +
+            "y of conte" +
+            "nt, becaus" +
+            "e it is th" +
+            "e first ti" +
+            "me that it" +
+            " is someth" +
+            "ing that w" +
+            "orks best " +
+            "in the car.”"
+    private static final Logger logger = LoggerFactory.getLogger(SegregatorServiceImplTest.class);
+    @Shared
+    String special2 = "ad of Digi" +
+            "tal Busine" +
+            "ss, Audi: ";
+
     @Unroll
     @SuppressWarnings(["GroovyPointlessBoolean", "GroovyAssignabilityCheck"])
     def "Latin Match"() {
         given: ""
         when: "check whether fragment is title based on given option"
+//        int max = fragment.length() / 10
+//        logger.debug("40 to 91, string: {}", fragment.substring(40, 91))
+//        def isLatin1 = fragment.substring(40, 91).matches("(\\p{IsLatin}*\\s*\\d*\\pP*)*");
+//        for (int j = 0; j < max; j++) {
+//            logger.debug("0 to {}, string: {}", (j + 1) * 10, fragment.substring(0, (j + 1) * 10))
+//            def isLatin = fragment.substring(0, (j + 1) * 10).matches("(\\p{IsLatin}*\\s*\\d*\\pP*)*");
+//            logger.debug("result {}", isLatin)
+//        }
         def isLatin = fragment.matches("(\\p{IsLatin}*\\s*\\d*\\pP*)*");
         then:
         assert isLatin == predict
+//        max
         where: "the scenarios list"
         no | fragment                                                  || predict | scenario
+//      1  | special                                                   || true    | "english"
+//        1  | special2                                                  || true    | "english"
         1  | "this is good: 1 2 3"                                     || true    | "english"
         1  | "PTC:"                                                    || true    | "english"
         1  | "OOV:"                                                    || true    | "english"
@@ -147,7 +189,11 @@ PIX TRANSPARENT DISPLAY
     def "Split"() {
         given: ""
         when: "check split"
-        SegRequest segRequest = new SegRequest(source, new DocOptions(), new TitlePatternOptions())
+        Set<SupportLang> supportLangSet = new HashSet<>()
+        supportLangSet.add(SupportLang.EN)
+        supportLangSet.add(SupportLang.FA)
+
+        SegRequest segRequest = new SegRequest(source, new DocOptions(supportLangSet), new TitlePatternOptions())
         ResultList<SegItem> result = segregatorService.split(segRequest)
         then:
         assert result.list.size() == predict

@@ -1,5 +1,8 @@
 package science.mengxin.java.language_segregator.service;
 
+import com.detectlanguage.DetectLanguage;
+import com.detectlanguage.Result;
+import com.detectlanguage.errors.APIError;
 import com.optimaize.langdetect.LanguageDetector;
 import com.optimaize.langdetect.LanguageDetectorBuilder;
 import com.optimaize.langdetect.i18n.LdLocale;
@@ -9,6 +12,7 @@ import com.optimaize.langdetect.profiles.LanguageProfileReader;
 import com.optimaize.langdetect.text.CommonTextObjectFactories;
 import com.optimaize.langdetect.text.TextObject;
 import com.optimaize.langdetect.text.TextObjectFactory;
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
@@ -24,12 +28,16 @@ public class LangDetectServiceImpl implements LangDetectService {
 
   private Boolean status;
   private List<LanguageProfile> languageProfiles;
+  private List<LanguageProfile> languageSmProfiles;
   private TextObjectFactory textLargeObjectFactory;
   private TextObjectFactory textCleanObjectFactory;
 
   public LangDetectServiceImpl() {
     try {
       languageProfiles = new LanguageProfileReader().readAllBuiltIn();
+      languageSmProfiles = new LanguageProfileReader().readAll(
+          new File(LangDetectServiceImpl.class.getResource("/profiles.sm").getPath())
+      );
       textLargeObjectFactory = CommonTextObjectFactories.forDetectingOnLargeText();
       textCleanObjectFactory = CommonTextObjectFactories.forDetectingShortCleanText();
     } catch (IOException e) {
@@ -41,9 +49,9 @@ public class LangDetectServiceImpl implements LangDetectService {
 
   private Double determineConfidence(String source) {
     if (source.length() < 100) {
-      return 0.5d;
-    } else if (source.length() < 200) {
       return 0.7d;
+    } else if (source.length() < 200) {
+      return 0.8d;
     } else {
       return 0.9d;
     }
@@ -66,15 +74,22 @@ public class LangDetectServiceImpl implements LangDetectService {
       }
       status = true;
     }
-    LanguageDetector languageDetector = LanguageDetectorBuilder.create(NgramExtractors.standard())
-        .withProfiles(languageProfiles)
-        .minimalConfidence(minimalConfidence)
-        .build();
+    LanguageDetector languageDetector;
     TextObject textObject;
-    logger.debug("the length of source {}", source.length());
-    if (source.length() < 50) {
+    logger.debug("the length of source {} and bytes {}", source.length(), source.getBytes().length);
+    String sourceCompress = source.replaceAll("\\s", "").replaceAll("\\pP", "");
+    logger.debug("remove whitespace and p {}", sourceCompress.getBytes().length);
+    if (source.getBytes().length < 20 || sourceCompress.getBytes().length < 20) {
+      languageDetector = LanguageDetectorBuilder.create(NgramExtractors.standard())
+          .withProfiles(languageSmProfiles)
+          .minimalConfidence(minimalConfidence)
+          .build();
       textObject = textCleanObjectFactory.forText(source);
     } else {
+      languageDetector = LanguageDetectorBuilder.create(NgramExtractors.standard())
+          .withProfiles(languageProfiles)
+          .minimalConfidence(minimalConfidence)
+          .build();
       textObject = textLargeObjectFactory.forText(source);
     }
     // NOTE: if you want to select this RTL string, need only there RTL string not include others.
@@ -87,6 +102,36 @@ public class LangDetectServiceImpl implements LangDetectService {
     } else {
       return Optional.empty();
     }
+  }
+
+  @Override
+  public Optional<SupportLang> remoteDetect(String source) {
+    DetectLanguage.apiKey = "91ff5462776798ad617da86fdc6131aa";
+    logger.info("###### NOTICE: calling the remote detection API which use monthly usage.");
+    // Enable secure mode (SSL) if passing sensitive information
+    // DetectLanguage.ssl = true;
+    List<Result> results;
+    try {
+      results = DetectLanguage.detect(source);
+    } catch (APIError apiError) {
+      logger.error("remote detection get error: {}", apiError);
+      return Optional.empty();
+    }
+    Result result = results.get(0);
+    String lang = result.language;
+    if (lang.equals("zh")) {
+      lang = "zh_CN";
+    } else if (lang.equals("zh-Hant")) {
+      lang = "zh_TW";
+    }
+    SupportLang supportLang;
+    try {
+      supportLang = SupportLang.valueOf(lang.toUpperCase());
+    } catch (Exception e) {
+      logger.error("the remote api return language code not compatible with local. {}", lang);
+      return Optional.empty();
+    }
+    return Optional.of(supportLang);
   }
 
   @Override

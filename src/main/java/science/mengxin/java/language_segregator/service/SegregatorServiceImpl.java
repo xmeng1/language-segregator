@@ -18,6 +18,7 @@ import science.mengxin.java.language_segregator.model.basic.ResultList;
 import science.mengxin.java.language_segregator.model.options.DocOptions;
 import science.mengxin.java.language_segregator.model.options.SupportLang;
 import science.mengxin.java.language_segregator.model.options.TitlePatternOptions;
+import science.mengxin.java.language_segregator.utilities.TimeLimitedMatcherFactory;
 
 @Service
 public class SegregatorServiceImpl implements SegregatorService {
@@ -50,6 +51,8 @@ public class SegregatorServiceImpl implements SegregatorService {
     return result.stream().filter(x -> !x.isEmpty()).collect(Collectors.toList());
   }
 
+  private static Pattern latinPattern = Pattern.compile("(\\p{IsLatin}*\\s*\\d*\\pP*)*");
+
   @Override
   public Boolean checkTitle(String fragment, TitlePatternOptions titlePatternOptions) {
 
@@ -57,8 +60,14 @@ public class SegregatorServiceImpl implements SegregatorService {
     if (titlePatternOptions.getFilterByCase() && titlePatternOptions.getAllUpperCase()) {
       // if the fragment is Latin String and all upper case, the toUpperCase result should be
       //  same with original string
-      if (fragment.matches("(\\p{IsLatin}*\\s*\\d*\\pP*)*") && fragment.toUpperCase()
-          .equals(fragment)) {
+      boolean isLatin;
+      try {
+        isLatin = TimeLimitedMatcherFactory.matcher(latinPattern, fragment, 2000).matches();
+      } catch (TimeLimitedMatcherFactory.RegExpTimeoutException e) {
+        isLatin = false;
+        logger.debug("check latin timeout, regarded it as non-latin {}", e.getMessage());
+      }
+      if (isLatin && fragment.toUpperCase().equals(fragment)) {
         return true;
       }
     }
@@ -82,8 +91,7 @@ public class SegregatorServiceImpl implements SegregatorService {
     logger.debug("start SegregatorService split {}", segRequest.toString());
 
     List<SegItem> segItemList = new ArrayList<>();
-    List<String> titles = new ArrayList<>();
-
+    Map<Integer, String> titles = new HashMap<>();
     // the overall seq number
     int seqNo = 1;
 
@@ -91,16 +99,30 @@ public class SegregatorServiceImpl implements SegregatorService {
     SupportLang preLang = null;
     SupportLang seqInitialLang = null;
     List<String> fragments = generateFragments(segRequest.getSource(), segRequest.getDocOptions());
-
+    boolean previousNotTitle = false;
     boolean checkTitle = segRequest.getDocOptions().getSupportTitle();
 
     // detect every fragment
     for (String fragment : fragments) {
+//      if (seqNo == 58) {
+//        logger.debug("process fragment {} and seqNo {} ", fragment, seqNo);
+//      }
+      logger.debug("process fragment {} and seqNo {} ", fragment, seqNo);
       if (checkTitle && checkTitle(fragment, segRequest.getTitlePatternOptions())) {
-        titles.add(fragment);
+        if (previousNotTitle) {
+          seqNo++;
+        }
+        titles.put(seqNo, fragment);
+        previousNotTitle = false;
         seqNo++;
       } else {
+        previousNotTitle = true;
         Optional<SupportLang> fragLang = langDetectService.detect(fragment);
+        // if the lang is empty or not in the predefine language list, use 3rd party api
+        if (!fragLang.isPresent() || !segRequest.getDocOptions().getLangList()
+            .contains(fragLang.get())) {
+          fragLang = langDetectService.remoteDetect(fragment);
+        }
 
         if (fragLang.isPresent() && preLang == null && seqInitialLang == null) {
           seqInitialLang = fragLang.get();
@@ -111,8 +133,6 @@ public class SegregatorServiceImpl implements SegregatorService {
         } else if (!fragLang.isPresent()) {
           fragLang = Optional.of(preLang);
         }
-
-
 
         SegItem segItem;
         Optional<SupportLang> finalFragLang = fragLang;
@@ -148,10 +168,14 @@ public class SegregatorServiceImpl implements SegregatorService {
 
       }
     }
+    logger.debug("finish fragment process {}", segItemList.size());
     // build result
-
+    segItemList.forEach(x -> x.setTitles(titles));
     ResultList<SegItem> resultList = new ResultList<>();
     resultList.setList(segItemList);
+    resultList.setTotalSize(segItemList.size());
+    resultList.setResultSize(segItemList.size());
+    resultList.setNextPage(false);
     return resultList;
   }
 }
