@@ -87,14 +87,12 @@ public class SegregatorServiceImpl implements SegregatorService {
   }
 
   /**
-   * In order to mapping between language, we need seq number to track the language fragment.
-   * There are several things we need to think about
+   * In order to mapping between language, we need seq number to track the language fragment. There
+   * are several things we need to think about
    *
-   * 1. title should be share between language
-   * 2. title should be with unique seq number
-   * 3. every pair of fragment (diff language) should have same seq number
-   * 4. the title + fragments seq number should in order
-   *
+   * 1. title should be share between language 2. title should be with unique seq number 3. every
+   * pair of fragment (diff language) should have same seq number 4. the title + fragments seq
+   * number should in order
    *
    * @param segRequest SegRequest
    * @return ResultList<SegItem>
@@ -107,28 +105,32 @@ public class SegregatorServiceImpl implements SegregatorService {
     Map<Integer, String> titles = new HashMap<>();
     // the overall seq number
     int seqNo = 1;
-
+    boolean initial = true;
     // the previous fragment language
     SupportLang preLang = null;
     SupportLang seqInitialLang = null;
     List<String> fragments = generateFragments(segRequest.getSource(), segRequest.getDocOptions());
-    boolean previousNotTitle = false;
+    boolean previousFragIsTitle = false;
     boolean checkTitle = segRequest.getDocOptions().getSupportTitle();
 
     // detect every fragment
     for (String fragment : fragments) {
       logger.debug("process fragment {} and seqNo {} ", fragment, seqNo);
       if (checkTitle && checkTitle(fragment, segRequest.getTitlePatternOptions())) {
-        // If previous fragment is not the title, we need increase the seq no for title.
-        if (previousNotTitle) {
+        if (!initial) {
+          // every title should have unique seq no, so increase it.
           seqNo++;
         }
         titles.put(seqNo, fragment);
-        previousNotTitle = false;
-        // every title should have unique seq no, so increase it.
-        seqNo++;
+        previousFragIsTitle = true;
+        initial = false;
       } else {
-        previousNotTitle = true;
+        initial = false;
+        // If previous fragment is the title, we need increase the seq no for non title.
+        if (previousFragIsTitle) {
+          seqNo++;
+        }
+
         Optional<SupportLang> fragLang = langDetectService.detect(fragment);
         // if the lang is empty or not in the predefine language list, use 3rd party api
         if (!fragLang.isPresent() || !segRequest.getDocOptions().getLangList()
@@ -170,14 +172,14 @@ public class SegregatorServiceImpl implements SegregatorService {
             segItem.getContents().put(seqNo, existing == null ? fragment : existing + fragment);
           } else {
             // only when the mapping language handle finish, process second seq.
-            if (finalFragLang.get().equals(seqInitialLang)) {
+            if (finalFragLang.get().equals(seqInitialLang) && !previousFragIsTitle) {
               seqNo++;
             }
             segItem.getContents().put(seqNo, fragment);
             preLang = finalFragLang.get();
           }
         }
-
+        previousFragIsTitle = false;
       }
     }
     logger.debug("finish fragment process {}", segItemList.size());
