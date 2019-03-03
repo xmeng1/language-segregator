@@ -86,6 +86,19 @@ public class SegregatorServiceImpl implements SegregatorService {
     return false;
   }
 
+  /**
+   * In order to mapping between language, we need seq number to track the language fragment.
+   * There are several things we need to think about
+   *
+   * 1. title should be share between language
+   * 2. title should be with unique seq number
+   * 3. every pair of fragment (diff language) should have same seq number
+   * 4. the title + fragments seq number should in order
+   *
+   *
+   * @param segRequest SegRequest
+   * @return ResultList<SegItem>
+   */
   @Override
   public ResultList<SegItem> split(SegRequest segRequest) {
     logger.debug("start SegregatorService split {}", segRequest.toString());
@@ -104,16 +117,15 @@ public class SegregatorServiceImpl implements SegregatorService {
 
     // detect every fragment
     for (String fragment : fragments) {
-//      if (seqNo == 58) {
-//        logger.debug("process fragment {} and seqNo {} ", fragment, seqNo);
-//      }
       logger.debug("process fragment {} and seqNo {} ", fragment, seqNo);
       if (checkTitle && checkTitle(fragment, segRequest.getTitlePatternOptions())) {
+        // If previous fragment is not the title, we need increase the seq no for title.
         if (previousNotTitle) {
           seqNo++;
         }
         titles.put(seqNo, fragment);
         previousNotTitle = false;
+        // every title should have unique seq no, so increase it.
         seqNo++;
       } else {
         previousNotTitle = true;
