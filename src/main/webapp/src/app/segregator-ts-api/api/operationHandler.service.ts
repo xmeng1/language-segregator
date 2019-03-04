@@ -129,15 +129,15 @@ export class OperationHandlerService {
         if (httpContentTypeSelected !== undefined) {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
-
-        return this.httpClient.get<any>(`${this.configuration.basePath}/actuator/health/${encodeURIComponent(String(component))}`,
-            {
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
+        return null;
+        // return this.httpClient.get<any>(`${this.configuration.basePath}/actuator/health/${encodeURIComponent(String(component))}`,
+        //     {
+        //         withCredentials: this.configuration.withCredentials,
+        //         headers: headers,
+        //         observe: observe,
+        //         reportProgress: reportProgress
+        //     }
+        // );
     }
 
     /**

@@ -3,13 +3,14 @@ import {NgModule} from '@angular/core';
 
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
-import {MatButtonModule, MatSelectModule} from '@angular/material';
+import {MatButtonModule, MatChipsModule, MatSelectModule, MatIconModule} from '@angular/material';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MatFileUploadModule} from 'angular-material-fileupload';
 import {ApiModule, Configuration, ConfigurationParameters} from './segregator-ts-api';
 import {HttpClientModule} from '@angular/common/http';
-
+import {LoggerModule, NgxLoggerLevel} from 'ngx-logger';
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
 // configuring providers
 
 // export function apiConfigFactory(): Configuration => {
@@ -28,6 +29,9 @@ import {HttpClientModule} from '@angular/common/http';
     AppRoutingModule,
     MatSelectModule,
     MatButtonModule,
+    MatChipsModule,
+    MatAutocompleteModule,
+    MatIconModule,
     FormsModule,
     ReactiveFormsModule,
     BrowserAnimationsModule,
@@ -35,7 +39,12 @@ import {HttpClientModule} from '@angular/common/http';
     ApiModule,
     // make sure to import the HttpClientModule in the AppModule only,
     // see https://github.com/angular/angular/issues/20575
-    HttpClientModule
+    HttpClientModule,
+    LoggerModule.forRoot({
+      // serverLoggingUrl: '/api/logs',
+      level: NgxLoggerLevel.DEBUG,
+      serverLogLevel: NgxLoggerLevel.ERROR
+    })
   ],
   providers: [],
   bootstrap: [AppComponent]

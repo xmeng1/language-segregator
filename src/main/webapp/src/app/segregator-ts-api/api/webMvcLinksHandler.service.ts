@@ -21,6 +21,7 @@ import { Observable }                                        from 'rxjs/Observab
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
+import {Link} from "..";
 
 
 @Injectable()

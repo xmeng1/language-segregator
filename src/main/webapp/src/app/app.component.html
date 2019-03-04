@@ -7,19 +7,32 @@
 </div>
 <!--<input id="fileInput" name="file" type="file" class="ng-hide" multiple>-->
 <!--<button mat-button id="uploadButton" color="primary"> Choose Files</button>-->
-<label for="singleFile">Upload file</label>
-<input id="singleFile" type="file" [fileUploadInputFor]="fileUploadQueue"/>
-<br>
-
+<!--<button for="singleFile">Upload file</button>-->
+<!--<input id="singleFile" type="file" [fileUploadInputFor]="fileUploadQueue"/>-->
+<!--<br>
 <mat-file-upload-queue #fileUploadQueue
                        [fileAlias]="'file'"
                        [httpUrl]="'http://localhost:8180/jax-rs-jersey-application-sample'">
+-->
 
-  <mat-file-upload [file]="file" [id]="i" *ngFor="let file of fileUploadQueue.files; let i = index"></mat-file-upload>
-</mat-file-upload-queue>
+<!--<div [fileUploadInputFor]="fileUploadQueue" class="upload-drop-zone">-->
+  <!--Just drag and drop files here-->
+<!--</div>-->
 
+<!--<div style="width: 500px">-->
+  <!--<mat-file-upload-queue #fileUploadQueue-->
+                         <!--[fileAlias]="'file'"-->
+                         <!--[httpUrl]="'http://localhost:8180/jax-rs-jersey-application-sample'" multiple>-->
+
+    <!--<mat-file-upload [file]="file" [id]="i" *ngFor="let file of fileUploadQueue.files; let i = index"></mat-file-upload>-->
+  <!--</mat-file-upload-queue>-->
+<!--</div>-->
+
+<button type="button" mat-raised-button color="primary" (click)="fileInput.click()">Choose File</button>
+<input hidden (change)="onFileSelected()" #fileInput type="file" id="file">
+<br>
 <mat-form-field>
-  <mat-select placeholder="Toppings" [formControl]="toppings" multiple>
+  <mat-select placeholder="Toppings" [formControl]="toppings" multiple (selectionChange)="selectionChange($event)">
     <mat-select-trigger>
       {{toppings.value ? toppings.value[0] : ''}}
       <span *ngIf="toppings.value?.length > 1" class="example-additional-selection">
@@ -29,6 +42,21 @@
     <mat-option *ngFor="let topping of toppingList" [value]="topping">{{topping}}</mat-option>
   </mat-select>
 </mat-form-field>
+
+<mat-form-field class="example-chip-list">
+  <mat-chip-list>
+    <mat-chip
+      *ngFor="let fruit of selectedLang"
+      [selectable]="selectable"
+      [removable]="removable"
+      (removed)="remove(fruit)">
+      {{fruit}}
+      <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+    </mat-chip>
+  </mat-chip-list>
+</mat-form-field>
+
+
 <router-outlet></router-outlet>
 
 
