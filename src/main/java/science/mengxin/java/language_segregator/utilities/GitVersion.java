@@ -2,6 +2,7 @@ package science.mengxin.java.language_segregator.utilities;
 
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 
 /**
@@ -42,6 +43,7 @@ public class GitVersion implements Serializable {
   private String tags;
   private String totalCommitCount;
 
+  @ApiModelProperty(value = "branch")
   @JsonProperty("branch")
   public String getBranch() {
     return branch;
@@ -52,6 +54,7 @@ public class GitVersion implements Serializable {
     this.branch = branch;
   }
 
+  @ApiModelProperty
   @JsonProperty("buildHost")
   public String getBuildHost() {
     return buildHost;
@@ -62,6 +65,7 @@ public class GitVersion implements Serializable {
     this.buildHost = buildHost;
   }
 
+  @ApiModelProperty
   @JsonProperty("buildTime")
   public String getBuildTime() {
     return buildTime;
@@ -72,6 +76,7 @@ public class GitVersion implements Serializable {
     this.buildTime = buildTime;
   }
 
+  @ApiModelProperty
   @JsonProperty("buildUserEmail")
   public String getBuildUserEmail() {
     return buildUserEmail;
@@ -82,6 +87,7 @@ public class GitVersion implements Serializable {
     this.buildUserEmail = buildUserEmail;
   }
 
+  @ApiModelProperty
   @JsonProperty("buildUserName")
   public String getBuildUserName() {
     return buildUserName;
@@ -92,6 +98,7 @@ public class GitVersion implements Serializable {
     this.buildUserName = buildUserName;
   }
 
+  @ApiModelProperty
   @JsonProperty("buildVersion")
   public String getBuildVersion() {
     return buildVersion;
@@ -102,6 +109,7 @@ public class GitVersion implements Serializable {
     this.buildVersion = buildVersion;
   }
 
+  @ApiModelProperty
   @JsonProperty("closestTagCommitCount")
   public String getClosestTagCommitCount() {
     return closestTagCommitCount;
@@ -112,6 +120,7 @@ public class GitVersion implements Serializable {
     this.closestTagCommitCount = closestTagCommitCount;
   }
 
+  @ApiModelProperty
   @JsonProperty("closestTagName")
   public String getClosestTagName() {
     return closestTagName;
@@ -122,6 +131,7 @@ public class GitVersion implements Serializable {
     this.closestTagName = closestTagName;
   }
 
+  @ApiModelProperty
   @JsonProperty("commitId")
   public String getCommitId() {
     return commitId;
@@ -132,6 +142,7 @@ public class GitVersion implements Serializable {
     this.commitId = commitId;
   }
 
+  @ApiModelProperty
   @JsonProperty("commitIdAbbrev")
   public String getCommitIdAbbrev() {
     return commitIdAbbrev;
@@ -142,6 +153,7 @@ public class GitVersion implements Serializable {
     this.commitIdAbbrev = commitIdAbbrev;
   }
 
+  @ApiModelProperty
   @JsonProperty("commitIdDescribe")
   public String getCommitIdDescribe() {
     return commitIdDescribe;
@@ -152,6 +164,7 @@ public class GitVersion implements Serializable {
     this.commitIdDescribe = commitIdDescribe;
   }
 
+  @ApiModelProperty
   @JsonProperty("commitIdDescribeShort")
   public String getCommitIdDescribeShort() {
     return commitIdDescribeShort;
@@ -162,6 +175,7 @@ public class GitVersion implements Serializable {
     this.commitIdDescribeShort = commitIdDescribeShort;
   }
 
+  @ApiModelProperty
   @JsonProperty("commitMessageFull")
   public String getCommitMessageFull() {
     return commitMessageFull;
@@ -172,6 +186,7 @@ public class GitVersion implements Serializable {
     this.commitMessageFull = commitMessageFull;
   }
 
+  @ApiModelProperty
   @JsonProperty("commitMessageShort")
   public String getCommitMessageShort() {
     return commitMessageShort;
@@ -182,6 +197,7 @@ public class GitVersion implements Serializable {
     this.commitMessageShort = commitMessageShort;
   }
 
+  @ApiModelProperty
   @JsonProperty("commitTime")
   public String getCommitTime() {
     return commitTime;
@@ -192,6 +208,7 @@ public class GitVersion implements Serializable {
     this.commitTime = commitTime;
   }
 
+  @ApiModelProperty
   @JsonProperty("commitUserEmail")
   public String getCommitUserEmail() {
     return commitUserEmail;
@@ -202,6 +219,7 @@ public class GitVersion implements Serializable {
     this.commitUserEmail = commitUserEmail;
   }
 
+  @ApiModelProperty
   @JsonProperty("commitUserName")
   public String getCommitUserName() {
     return commitUserName;
@@ -212,6 +230,7 @@ public class GitVersion implements Serializable {
     this.commitUserName = commitUserName;
   }
 
+  @ApiModelProperty
   @JsonProperty("dirty")
   public String getDirty() {
     return dirty;
@@ -222,6 +241,7 @@ public class GitVersion implements Serializable {
     this.dirty = dirty;
   }
 
+  @ApiModelProperty
   @JsonProperty("remoteOriginUrl")
   public String getRemoteOriginUrl() {
     return remoteOriginUrl;
@@ -232,6 +252,7 @@ public class GitVersion implements Serializable {
     this.remoteOriginUrl = remoteOriginUrl;
   }
 
+  @ApiModelProperty
   @JsonProperty("tags")
   public String getTags() {
     return tags;
@@ -242,6 +263,7 @@ public class GitVersion implements Serializable {
     this.tags = tags;
   }
 
+  @ApiModelProperty(value = "totalCommitCount")
   @JsonProperty("totalCommitCount")
   public String getTotalCommitCount() {
     return totalCommitCount;

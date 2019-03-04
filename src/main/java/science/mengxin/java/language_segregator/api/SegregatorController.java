@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.bind.annotation.CrossOrigin;
+
 import science.mengxin.java.language_segregator.model.SegItem;
 import science.mengxin.java.language_segregator.model.SegRequest;
 import science.mengxin.java.language_segregator.model.basic.ResultList;
@@ -38,6 +40,7 @@ public class SegregatorController {
   }
 
   @PostMapping(value = "/split", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+  @CrossOrigin(origins = "http://localhost:4200")
   @ResponseBody
   public ResultList<SegItem> splitString(@RequestBody SegRequest segRequest) {
 //    return new VersionInfo("0.0.1");
@@ -45,6 +48,7 @@ public class SegregatorController {
   }
 
   @PostMapping(value = "/splitDoc", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+  @CrossOrigin(origins = "http://localhost:4200")
   @ResponseBody
   public ResultList<SegItem> splitDoc(
       @Valid SegRequest config,

@@ -4,6 +4,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 import java.util.concurrent.atomic.AtomicLong;
 import science.mengxin.java.language_segregator.model.basic.Result;
@@ -15,6 +16,7 @@ import science.mengxin.java.language_segregator.utilities.GitVersionUtils;
 public class VersionController {
 
   @GetMapping("/version")
+  @CrossOrigin(origins = "http://localhost:4200")
   @ResponseBody
   public Result<GitVersion> getVersion(
       @RequestParam(name = "name", required = false, defaultValue = "Stranger") String name) {
