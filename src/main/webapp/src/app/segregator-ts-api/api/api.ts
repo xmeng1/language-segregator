@@ -1,0 +1,13 @@
+export * from './basicErrorController.service';
+import { BasicErrorControllerService } from './basicErrorController.service';
+export * from './homeController.service';
+import { HomeControllerService } from './homeController.service';
+export * from './operationHandler.service';
+import { OperationHandlerService } from './operationHandler.service';
+export * from './segregatorController.service';
+import { SegregatorControllerService } from './segregatorController.service';
+export * from './versionController.service';
+import { VersionControllerService } from './versionController.service';
+export * from './webMvcLinksHandler.service';
+import { WebMvcLinksHandlerService } from './webMvcLinksHandler.service';
+export const APIS = [BasicErrorControllerService, HomeControllerService, OperationHandlerService, SegregatorControllerService, VersionControllerService, WebMvcLinksHandlerService];
