@@ -24,19 +24,57 @@ import {HttpEvent, HttpEventType} from "@angular/common/http";
 })
 export class AppComponent implements OnInit {
 
+  /*
+  branch: "develop"
+​​​​
+buildTime: "2019-03-04T07:34:13+0000"
+​​
+buildVersion: "0.0.1"
+​​
+closestTagCommitCount: ""
+​​
+closestTagName: ""
+​​
+commitId: "06195d9a79883491a99332a96886a5322c78dfb2"
+​​
+commitIdAbbrev: "06195d9"
+​​
+commitIdDescribe: "06195d9-dirty"
+​​
+commitIdDescribeShort: "06195d9-dirty"
+​​
+commitMessageFull: "basic material design work"
+​​
+commitMessageShort: "basic material design work"
+​​
+commitTime: "2019-03-04T07:10:16+0000"
+​​​​
+dirty: "true"
+​​​​
+tags: ""
+​​
+totalCommitCount: "29"
+  * */
+  version = '';
+  commitIdAbbrev = '';
+  commitTime = '';
+  buildTime = '';
   constructor(private versionControllerService: VersionControllerService,
               private segregatorControllerService: SegregatorControllerService,
               private logger: NGXLogger) {
     versionControllerService.getVersionUsingGET().subscribe((res: ResultGitVersion) => {
       this.logger.debug("get the version result", res);
       this.version = res.result['buildVersion'];
+      this.commitIdAbbrev = res.result['commitIdAbbrev'];
+      this.commitTime = res.result['commitTime'];
+      this.buildTime = res.result['buildTime'];
     });
   }
 
   title = 'language-segregator';
-  toppings = new FormControl();
+  langSelectFormControl = new FormControl();
 
-  toppingList: string[] = [];
+  allLangList: string[] = [];
   descToLang: { [key: string]: string; } = {};
 
   getDecsFromLangCode(n: string): string {
@@ -74,12 +112,12 @@ export class AppComponent implements OnInit {
       if (description.length == 0) {
         this.logger.info("cannot get the language description: ", n);
       }
-      this.toppingList.push(description);
+      this.allLangList.push(description);
       this.descToLang[description] = n;
     }
-    this.toppingList.sort();
+    this.allLangList.sort();
     this.logger.debug(localeCode.getName('en'));
-    // this.logger.debug(this.toppingList)
+    // this.logger.debug(this.allLangList)
 
   }
 
@@ -130,12 +168,16 @@ export class AppComponent implements OnInit {
     if (index >= 0) {
       this.selectedLang.splice(index, 1);
     }
-    // this.toppings.reset()
-    // this.toppings.value = this.selectedLang;
+    // this.langSelectFormControl.reset()
+    // this.langSelectFormControl.value = this.selectedLang;
   }
-
-  version = '';
-
+  selectedFile: string = "";
+  fileEvent(fileInput: Event){
+    this.logger.debug("file event: ", fileInput);
+    let traget: any = fileInput.target;
+    let file = traget.files[0];
+    this.selectedFile = file.name;
+  }
   onFileSelected() {
     const inputNode: any = document.querySelector('#file');
 
@@ -209,24 +251,24 @@ export class AppComponent implements OnInit {
         this.logger.debug("result", res.list[1].contents);
         this.tiles.push({
           text: this.getDecsFromLangCode(res.list[0].language.toString()),
-          cols: 4,
+          cols: 2,
           rows: 1,
           color: 'lightgreen'
-        })
+        });
         this.tiles.push({
           text: this.getDecsFromLangCode(res.list[1].language.toString()),
-          cols: 4,
+          cols: 2,
           rows: 1,
           color: 'lightpink'
-        })
-        for (var _i = 1; _i <= sum; _i++) {
+        });
+        for (let _i = 1; _i <= sum; _i++) {
           let key: string = _i.toString();
 
           if (res.list[0].titles.hasOwnProperty(key)) {
-            this.tiles.push({text: res.list[0].titles[key], cols: 4, rows: 1, color: 'lightblue'})
+            this.tiles.push({text: res.list[0].titles[key], cols: 4, rows: 1, color: 'lightblue', height: 50});
           } else {
-            this.tiles.push({text: res.list[0].contents[key], cols: 2, rows: 1, color: 'lightgreen'})
-            this.tiles.push({text: res.list[1].contents[key], cols: 2, rows: 1, color: 'lightpink'})
+            this.tiles.push({text: res.list[0].contents[key], cols: 2, rows: 1, color: 'lightgreen'});
+            this.tiles.push({text: res.list[1].contents[key], cols: 2, rows: 1, color: 'lightpink'});
           }
         }
       }, (event: HttpEvent<ResultListSegItem>) => {
@@ -268,4 +310,5 @@ export interface Tile {
   cols: number;
   rows: number;
   text: string;
+  height?: number;
 }

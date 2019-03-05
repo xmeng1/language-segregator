@@ -1,74 +1,79 @@
 <!--The content below is only a placeholder and can be replaced.-->
 <script src="app.component.ts"></script>
-<div style="text-align:center">
-  <h1>
-    Welcome to {{title}}!
-  </h1>
-</div>
-<!--<input id="fileInput" name="file" type="file" class="ng-hide" multiple>-->
-<!--<button mat-button id="uploadButton" color="primary"> Choose Files</button>-->
-<!--<button for="singleFile">Upload file</button>-->
-<!--<input id="singleFile" type="file" [fileUploadInputFor]="fileUploadQueue"/>-->
-<!--<br>
-<mat-file-upload-queue #fileUploadQueue
-                       [fileAlias]="'file'"
-                       [httpUrl]="'http://localhost:8180/jax-rs-jersey-application-sample'">
--->
 
-<!--<div [fileUploadInputFor]="fileUploadQueue" class="upload-drop-zone">-->
-  <!--Just drag and drop files here-->
-<!--</div>-->
-
-<!--<div style="width: 500px">-->
-  <!--<mat-file-upload-queue #fileUploadQueue-->
-                         <!--[fileAlias]="'file'"-->
-                         <!--[httpUrl]="'http://localhost:8180/jax-rs-jersey-application-sample'" multiple>-->
-
-    <!--<mat-file-upload [file]="file" [id]="i" *ngFor="let file of fileUploadQueue.files; let i = index"></mat-file-upload>-->
-  <!--</mat-file-upload-queue>-->
-<!--</div>-->
-
-<button type="button" mat-raised-button color="primary" (click)="fileInput.click()">Choose File</button>
-<input hidden (change)="onFileSelected()" #fileInput type="file" id="file">
-<br>
-<mat-form-field>
-  <mat-select placeholder="Toppings" [formControl]="toppings" multiple (selectionChange)="selectionChange($event)">
-    <mat-select-trigger>
-      {{toppings.value ? toppings.value[0] : ''}}
-      <span *ngIf="toppings.value?.length > 1" class="example-additional-selection">
-        (+{{toppings.value.length - 1}} {{toppings.value?.length === 2 ? 'other' : 'others'}})
+<mat-grid-list cols="4" rowHeight="6:1" >
+  <mat-grid-tile colspan="4" [style.border]="'3px double purple'">
+    <div style="text-align:center">
+      <h1>
+        Welcome to {{title}}!
+      </h1>
+    </div>
+  </mat-grid-tile>
+  <!--[style.border-bottom]="'1px solid skyblue'"-->
+  <mat-grid-tile colspan="4">
+    <label for="langSelector">Please choose document (RTF,DOCX,TXT,MARKDOWN...):</label>
+  </mat-grid-tile>
+  <mat-grid-tile colspan="1"  class="setting-bottom" >
+    <button type="button" mat-raised-button color="primary" (click)="fileInput.click()">Choose
+      File
+    </button>
+    <input hidden (change)="onFileSelected()" #fileInput type="file" id="file"  (change)="fileEvent($event)">
+  </mat-grid-tile>
+  <mat-grid-tile colspan="3" class="setting-bottom">
+    {{selectedFile}}
+  </mat-grid-tile>
+  <mat-grid-tile colspan="4">
+    <label for="langSelector">Please select the languages of the submitted document:</label>
+  </mat-grid-tile>
+  <mat-grid-tile colspan="1"  class="setting-bottom">
+    <mat-form-field>
+      <mat-select id="langSelector" placeholder="Languages" [formControl]="langSelectFormControl" multiple
+                  (selectionChange)="selectionChange($event)">
+        <mat-select-trigger>
+          {{langSelectFormControl.value ? langSelectFormControl.value[0] : ''}}
+          <span *ngIf="langSelectFormControl.value?.length > 1" class="example-additional-selection">
+        (+{{langSelectFormControl.value.length - 1}} {{langSelectFormControl.value?.length === 2 ? 'other' : 'others'}})
       </span>
-    </mat-select-trigger>
-    <mat-option *ngFor="let topping of toppingList" [value]="topping">{{topping}}</mat-option>
-  </mat-select>
-</mat-form-field>
+        </mat-select-trigger>
+        <mat-option *ngFor="let topping of allLangList" [value]="topping">{{topping}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile colspan="3"  class="setting-bottom">
+    <mat-form-field class="example-chip-list">
+      <mat-chip-list>
+        <mat-chip
+          *ngFor="let fruit of selectedLang"
+          [selectable]="selectable"
+          [removable]="removable"
+          (removed)="remove(fruit)">
+          {{fruit}}
+          <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+        </mat-chip>
+      </mat-chip-list>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile colspan="4" style="height: auto">
+    <button mat-raised-button color="accent" (click)="analysis()" class="submit-button">Start to analysis</button>
+  </mat-grid-tile>
+  <mat-grid-tile colspan="4" >
+    <mat-card *ngIf="showSpinner">
+      <mat-card-content>
+        <h2 class="example-h2">Waiting for the response</h2>
+        <section class="example-section">
+          <mat-progress-bar
+            class="example-margin"
+            [color]="'primary'"
+            [mode]="'indeterminate'">
+          </mat-progress-bar>
+        </section>
+      </mat-card-content>
+    </mat-card>
+  </mat-grid-tile>
+</mat-grid-list>
 
-<mat-form-field class="example-chip-list">
-  <mat-chip-list>
-    <mat-chip
-      *ngFor="let fruit of selectedLang"
-      [selectable]="selectable"
-      [removable]="removable"
-      (removed)="remove(fruit)">
-      {{fruit}}
-      <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
-    </mat-chip>
-  </mat-chip-list>
-</mat-form-field>
-
-<button mat-raised-button color="accent" (click)="analysis()">Start to analysis</button>
-<mat-card *ngIf="showSpinner">
-  <mat-card-content>
-    <h2 class="example-h2">Waiting for the response</h2>
-    <section class="example-section">
-      <mat-progress-bar
-        class="example-margin"
-        [color]="'primary'"
-        [mode]="'indeterminate'">
-      </mat-progress-bar>
-    </section>
-  </mat-card-content>
-</mat-card>
+<!--
+    [style.height]="tile.height+'px'"-->
 <mat-grid-list cols="4" rowHeight="100px">
   <mat-grid-tile
     *ngFor="let tile of tiles"
@@ -83,4 +88,35 @@
 <router-outlet></router-outlet>
 
 
-<p>{{version}}</p>
+<div style="float: right">
+  <p>version: {{version}}</p>
+  <p>build time: {{buildTime}}</p>
+  <p>commit abbrev : {{commitIdAbbrev}}</p>
+  <p>commit time: {{commitTime}}</p>
+
+</div>
+
+
+
+<!--<input id="fileInput" name="file" type="file" class="ng-hide" multiple>-->
+<!--<button mat-button id="uploadButton" color="primary"> Choose Files</button>-->
+<!--<button for="singleFile">Upload file</button>-->
+<!--<input id="singleFile" type="file" [fileUploadInputFor]="fileUploadQueue"/>-->
+<!--<br>
+<mat-file-upload-queue #fileUploadQueue
+                       [fileAlias]="'file'"
+                       [httpUrl]="'http://localhost:8180/jax-rs-jersey-application-sample'">
+-->
+
+<!--<div [fileUploadInputFor]="fileUploadQueue" class="upload-drop-zone">-->
+<!--Just drag and drop files here-->
+<!--</div>-->
+
+<!--<div style="width: 500px">-->
+<!--<mat-file-upload-queue #fileUploadQueue-->
+<!--[fileAlias]="'file'"-->
+<!--[httpUrl]="'http://localhost:8180/jax-rs-jersey-application-sample'" multiple>-->
+
+<!--<mat-file-upload [file]="file" [id]="i" *ngFor="let file of fileUploadQueue.files; let i = index"></mat-file-upload>-->
+<!--</mat-file-upload-queue>-->
+<!--</div>-->
