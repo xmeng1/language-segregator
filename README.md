@@ -14,7 +14,7 @@ The API can be accessed by using Swagger-UI:
 
 http://localhost:8080/swagger-ui.html
 
-![Swagger-UI-screenshot]()
+![Swagger-UI-screenshot](/doc/img/api-swagger-ui.png)
 
 There are two primary API for separate String and Document:
 
@@ -23,11 +23,11 @@ There are two primary API for separate String and Document:
 
 If you check the Swagger API Document, you will find there are other configurations for the API. Based on this configuration, the API can support more format of the document. Next section will introduce these option in detail.
 
-![API-Screenshot]
+![API-Screenshot](/doc/img/api-options.png)
 
 In order to give end-user best User Experience, we format the output of analysis result as a mapping between language. Meanwhile, I think about the title in the document should be shared among the different languages. So finally, the application can provide the result like this: 
 
-![Analysis-Result-Screenshot]()
+![Analysis-Result-Screenshot](/doc/img/webapp-analysis-resuolt.png)
 
 ## The API Design and  Option Usage
 
@@ -41,19 +41,19 @@ The first important question is how to divide the document into several fragment
 
 Apart from the **Line Break**, the API also supports the **Blank Line** and **Regular Express**. If choose **Regular Express**, the express string should be provided.
 
-![API-Fragment-Separator]()
+![API-Fragment-Separator](/doc/img/api-option-separator.png)
 
 ### Language detection
 
 One of the core technique back of the API is language detection, but every local algorithm should be based on the existing language profile to detect the language, but if the string of fragment in the document is too short, the detection result will be not accurate. So in the design of the API, I need the user specifies the languages of the document contains which can filter some detection false positive.
 
-![API-Contained-Lang-List]()
+![API-Contained-Lang-List](/doc/img/api-option-lang-list.png)
 
 ### Support title
 
 According to the sample document, I found that there are lots of title or some Uppercase introduction sentence or word. These fragments are not translated. So they are should be shared between the multiple language scripts. Therefore, I design an option for whether support title and the default value is **True**.
 
-![API-Support-Title]()
+![API-Support-Title](/doc/img/api-option-support-title.png)
 
 #### more options of title
 
@@ -64,7 +64,7 @@ If support the title, the question is how to decide one fragment is Title? So I 
 3. whether match with a specified Regular Expression.
 4. filter by the language (TODO)
 
-![API-Title-Filter-Options]()
+![API-Title-Filter-Options](/doc/img/api-options-title-fitler-option.png)
 
 The default option: Filter by all Capitals based on the sample document which can filter nearly all titles.
 
