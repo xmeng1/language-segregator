@@ -2,7 +2,7 @@ import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
 
 import {AppRoutingModule} from './app-routing.module';
-import {AppComponent} from './app.component';
+import {AppComponent, AboutDialog} from './app.component';
 import {MatButtonModule, MatChipsModule, MatSelectModule, MatIconModule} from '@angular/material';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
@@ -15,6 +15,8 @@ import {MatExpansionModule} from '@angular/material/expansion';
 import {MatGridListModule} from '@angular/material/grid-list';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
 import {MatCardModule} from '@angular/material/card';
+import {MatDialogModule} from '@angular/material/dialog';
+import {MatInputModule} from '@angular/material';
 // configuring providers
 
 // export function apiConfigFactory(): Configuration => {
@@ -26,7 +28,8 @@ import {MatCardModule} from '@angular/material/card';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    AboutDialog
   ],
   imports: [
     BrowserModule,
@@ -40,6 +43,8 @@ import {MatCardModule} from '@angular/material/card';
     MatGridListModule,
     MatProgressBarModule,
     MatCardModule,
+    MatDialogModule,
+    MatInputModule,
     FormsModule,
     ReactiveFormsModule,
     BrowserAnimationsModule,
@@ -54,6 +59,7 @@ import {MatCardModule} from '@angular/material/card';
       serverLogLevel: NgxLoggerLevel.ERROR
     })
   ],
+  entryComponents: [AboutDialog],
   providers: [],
   bootstrap: [AppComponent]
 })

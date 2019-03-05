@@ -1,4 +1,4 @@
-import {Component, OnChanges, OnInit, SimpleChanges, ViewChild} from '@angular/core';
+import {Component, Inject, OnChanges, OnInit, SimpleChanges, ViewChild} from '@angular/core';
 import {FormControl} from '@angular/forms';
 import {
   DocOptions,
@@ -11,7 +11,12 @@ import localeCode from "iso-639-1";
 import {Observable} from "rxjs";
 import {COMMA, ENTER} from '@angular/cdk/keycodes';
 import {ElementRef} from '@angular/core';
-import {MatAutocompleteSelectedEvent, MatChipInputEvent, MatAutocomplete} from '@angular/material';
+import {
+  MatAutocompleteSelectedEvent,
+  MatChipInputEvent,
+  MatAutocomplete,
+  MatDialogRef, MAT_DIALOG_DATA, MatDialog
+} from '@angular/material';
 import {map, startWith} from 'rxjs/operators';
 import {MatSelectChange} from "@angular/material/typings/esm5/select";
 import {Title} from "@angular/platform-browser";
@@ -61,7 +66,8 @@ totalCommitCount: "29"
   buildTime = '';
   constructor(private versionControllerService: VersionControllerService,
               private segregatorControllerService: SegregatorControllerService,
-              private logger: NGXLogger) {
+              private logger: NGXLogger,
+              public dialog: MatDialog) {
     versionControllerService.getVersionUsingGET().subscribe((res: ResultGitVersion) => {
       this.logger.debug("get the version result", res);
       this.version = res.result['buildVersion'];
@@ -303,6 +309,17 @@ totalCommitCount: "29"
     // {text: 'Three', cols: 2, rows: 1, color: 'lightpink'},
     // {text: 'Four', cols: 4, rows: 1, color: '#DDBDF1'},
   ];
+
+  openDialog(): void {
+    const dialogRef = this.dialog.open(AboutDialog, {
+      width: '250px',
+      data: {name: "xx", animal: "yy"}
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+    });
+  }
 }
 
 export interface Tile {
@@ -311,4 +328,23 @@ export interface Tile {
   rows: number;
   text: string;
   height?: number;
+}
+
+export interface DialogData {
+  animal: string;
+  name: string;
+}
+
+@Component({
+  selector: 'about-dialog',
+  templateUrl: 'about-dialog.html',
+})
+export class AboutDialog {
+  constructor(
+    public dialogRef: MatDialogRef<AboutDialog>,
+    @Inject(MAT_DIALOG_DATA) public data: DialogData) {}
+
+  onNoClick(): void {
+    this.dialogRef.close();
+  }
 }
