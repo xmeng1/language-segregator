@@ -12,7 +12,6 @@ import com.optimaize.langdetect.profiles.LanguageProfileReader;
 import com.optimaize.langdetect.text.CommonTextObjectFactories;
 import com.optimaize.langdetect.text.TextObject;
 import com.optimaize.langdetect.text.TextObjectFactory;
-import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
@@ -35,9 +34,10 @@ public class LangDetectServiceImpl implements LangDetectService {
   public LangDetectServiceImpl() {
     try {
       languageProfiles = new LanguageProfileReader().readAllBuiltIn();
-      languageSmProfiles = new LanguageProfileReader().readAll(
-          new File(LangDetectServiceImpl.class.getResource("/profiles.sm").getPath())
-      );
+      // languageSmProfiles = new LanguageProfileReader().readAll(
+      //     new File(LangDetectServiceImpl.class.getResource("/profiles.sm").getPath())
+      // );
+      languageSmProfiles = new LanguageProfileReader().readAllBuiltIn();
       textLargeObjectFactory = CommonTextObjectFactories.forDetectingOnLargeText();
       textCleanObjectFactory = CommonTextObjectFactories.forDetectingShortCleanText();
     } catch (IOException e) {
