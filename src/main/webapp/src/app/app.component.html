@@ -1,6 +1,15 @@
 <!--The content below is only a placeholder and can be replaced.-->
 <script src="app.component.ts"></script>
+<ul style="z-index: 1000">
+  <li><a class="active" href="#home">Home</a></li>
+  <li><a href="/swagger-ui.html">Swagger UI</a></li>
+  <li><a href="#contact">Document</a></li>
+  <li><a href="#contact">GitHub</a></li>
+  <li style="float:right; padding-right: 20px;"><a href="#about">About</a></li>
+</ul>
 
+<router-outlet></router-outlet>
+<div style="padding:20px;margin-top:30px;">
 <mat-grid-list cols="4" rowHeight="6:1" >
   <mat-grid-tile colspan="4" [style.border]="'3px double purple'">
     <div style="text-align:center">
@@ -84,10 +93,7 @@
   </mat-grid-tile>
 </mat-grid-list>
 
-
-<router-outlet></router-outlet>
-
-
+</div>
 <div style="float: right">
   <p>version: {{version}}</p>
   <p>build time: {{buildTime}}</p>
