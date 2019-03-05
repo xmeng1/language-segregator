@@ -1,0 +1,1 @@
+heroku deploy:jar target/my-app.jar --app lang-segregator
