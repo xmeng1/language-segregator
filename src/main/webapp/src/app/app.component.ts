@@ -1,6 +1,11 @@
 import {Component, OnChanges, OnInit, SimpleChanges, ViewChild} from '@angular/core';
 import {FormControl} from '@angular/forms';
-import {DocOptions, ResultGitVersion, VersionControllerService} from './segregator-ts-api';
+import {
+  DocOptions,
+  ResultGitVersion, ResultListSegItem,
+  SegregatorControllerService,
+  VersionControllerService
+} from './segregator-ts-api';
 import {NGXLogger} from "ngx-logger";
 import localeCode from "iso-639-1";
 import {Observable} from "rxjs";
@@ -9,6 +14,8 @@ import {ElementRef} from '@angular/core';
 import {MatAutocompleteSelectedEvent, MatChipInputEvent, MatAutocomplete} from '@angular/material';
 import {map, startWith} from 'rxjs/operators';
 import {MatSelectChange} from "@angular/material/typings/esm5/select";
+import {Title} from "@angular/platform-browser";
+import {HttpEvent, HttpEventType} from "@angular/common/http";
 
 @Component({
   selector: 'app-root',
@@ -17,7 +24,9 @@ import {MatSelectChange} from "@angular/material/typings/esm5/select";
 })
 export class AppComponent implements OnInit {
 
-  constructor(private versionControllerService: VersionControllerService, private logger: NGXLogger) {
+  constructor(private versionControllerService: VersionControllerService,
+              private segregatorControllerService: SegregatorControllerService,
+              private logger: NGXLogger) {
     versionControllerService.getVersionUsingGET().subscribe((res: ResultGitVersion) => {
       this.logger.debug("get the version result", res);
       this.version = res.result['buildVersion'];
@@ -29,6 +38,23 @@ export class AppComponent implements OnInit {
 
   toppingList: string[] = [];
   descToLang: { [key: string]: string; } = {};
+
+  getDecsFromLangCode(n: string): string {
+    let description = localeCode.getName(n.toLocaleLowerCase());
+    if (n.toLocaleLowerCase() == "ast") {
+      description = "Asturian";
+    } else if (n.toLocaleLowerCase() == "zhcn") {
+      n = "ZH_CN";
+      description = "Chinese(Simplified)";
+    } else if (n.toLocaleLowerCase() == "zhtw") {
+      n = "ZH_TW";
+      description = "Chinese(Traditional)";
+    } else if (n.toLocaleLowerCase() == "unknown") {
+      // don't use the unknown language for user selection
+      description = "unknown";
+    }
+    return description;
+  }
 
   initialLang() {
     for (let n in DocOptions.LangListEnum) {
@@ -60,9 +86,9 @@ export class AppComponent implements OnInit {
   selectionChange(selectedData: MatSelectChange) {
     this.logger.debug("selectionChange ", selectedData);
     this.selectedLang = [];
-    let data = selectedData.value as Array<String>;
-    data.forEach((element) => {
-      this.selectedLang.push(Array.of(element));
+    let data = selectedData.value as Array<string>;
+    data.forEach((element: string) => {
+      this.selectedLang.push(element)
     });
     // this.fruits.concat(selectedData.value as Array<String>)
     // (selectedData.value as Array<String>).map(k => this.fruits.join(k));
@@ -104,8 +130,8 @@ export class AppComponent implements OnInit {
     if (index >= 0) {
       this.selectedLang.splice(index, 1);
     }
-    this.toppings.reset()
-    this.toppings.value = this.selectedLang;
+    // this.toppings.reset()
+    // this.toppings.value = this.selectedLang;
   }
 
   version = '';
@@ -118,10 +144,128 @@ export class AppComponent implements OnInit {
 
       reader.onload = (file: any) => {
         this.logger.debug("get file: ", file)
+        this.file = file;
       };
       reader.readAsArrayBuffer(inputNode.files[0]);
     }
   }
 
+  file: any; // FileReader
 
+  analysis() {
+    // get the selected languages
+    this.logger.debug("get the selected languages ", this.selectedLang);
+    let lang: Array<DocOptions.LangListEnum> = [];
+    let langCode;
+    this.selectedLang.forEach((x: string) => {
+      langCode = this.descToLang[x];
+      let langEnum: DocOptions.LangListEnum = DocOptions.LangListEnum[langCode];
+      lang.push(langEnum);
+      this.logger.debug("convert to language code: ", langCode);
+    });
+    // get the blob form the file
+    this.logger.debug("get the file: ", this.file);
+    let blob = new Blob([this.file.target.result]);
+    // this.file.onload((e: Event & { target: { result: string } }) => {
+    //   this.logger.debug("get the blob form the file: ", target.result);
+    // })
+    this.logger.debug("get the blob form the file: ", blob);
+    /*
+        splitDocUsingPOST(
+        doc: Blob,
+        docOptionsBlockSeparator?: 'BLANK_LINE' | 'LINE_BREAK' | 'REGEX_EXPRESS',
+        docOptionsBlockSeparatorRex?: string,
+        docOptionsLangList?: Array<'UNKNOWN' | 'AF' | 'AN' | 'AR' | 'BE' | 'BR' | 'CA' | 'BG' | 'BN' | 'CS' | 'CY' | 'DA' | 'DE' | 'EL' | 'EN' | 'ES' | 'ET' | 'EU' | 'FA' | 'FI' | 'FR' | 'GA' | 'GL' | 'GU' | 'HE' | 'HI' | 'HR' | 'HT' | 'HU' | 'ID' | 'IS' | 'IT' | 'JA' | 'KM' | 'KN' | 'KO' | 'LT' | 'LV' | 'MK' | 'ML' | 'MR' | 'MS' | 'MT' | 'NE' | 'NL' | 'NO' | 'OC' | 'PA' | 'PL' | 'PT' | 'RO' | 'RU' | 'SK' | 'SL' | 'SO' | 'SQ' | 'SR' | 'SV' | 'SW' | 'TA' | 'TE' | 'TH' | 'TL' | 'TR' | 'UK' | 'UR' | 'VI' | 'WA' | 'YI' | 'AST' | 'ZH_CN' | 'ZH_TW'>,
+        docOptionsSupportMapping?: boolean,
+        docOptionsSupportTitle?: boolean,
+        source?: string,
+        titlePatternOptionsAllUpperCase?: boolean,
+        titlePatternOptionsFilterByCase?: boolean,
+        titlePatternOptionsFilterByLang?: boolean,
+        titlePatternOptionsFilterByLength?: boolean,
+        titlePatternOptionsFilterByRegex?: boolean,
+        titlePatternOptionsLang?: 'UNKNOWN' | 'AF' | 'AN' | 'AR' | 'BE' | 'BR' | 'CA' | 'BG' | 'BN' | 'CS' | 'CY' | 'DA' | 'DE' | 'EL' | 'EN' | 'ES' | 'ET' | 'EU' | 'FA' | 'FI' | 'FR' | 'GA' | 'GL' | 'GU' | 'HE' | 'HI' | 'HR' | 'HT' | 'HU' | 'ID' | 'IS' | 'IT' | 'JA' | 'KM' | 'KN' | 'KO' | 'LT' | 'LV' | 'MK' | 'ML' | 'MR' | 'MS' | 'MT' | 'NE' | 'NL' | 'NO' | 'OC' | 'PA' | 'PL' | 'PT' | 'RO' | 'RU' | 'SK' | 'SL' | 'SO' | 'SQ' | 'SR' | 'SV' | 'SW' | 'TA' | 'TE' | 'TH' | 'TL' | 'TR' | 'UK' | 'UR' | 'VI' | 'WA' | 'YI' | 'AST' | 'ZH_CN' | 'ZH_TW',
+        titlePatternOptionsLengthThreshold?: number,
+        titlePatternOptionsRegexPattern?: string,
+        observe: any = 'body',
+        reportProgress: boolean = false ): Observable<any> {
+    */
+    // invoke the api
+    this.showSpinner = true;
+    this.segregatorControllerService.splitDocUsingPOST(blob, undefined,
+      undefined, lang, undefined,
+      undefined, undefined, undefined,
+      undefined, undefined, undefined,
+      undefined, undefined,
+      undefined,undefined, undefined, true).subscribe(
+      res => {
+        this.showSpinner = false;
+        this.logger.debug("get the split result: ", res);
+        let sum: number = Object.keys(res.list[0].contents).length + Object.keys(res.list[0].titles).length;
+        this.logger.debug("the sum of content and titles", sum);
+        this.logger.debug("result", res.list[0].titles);
+        this.logger.debug("result", res.list[0].contents);
+        this.logger.debug("result", res.list[1].titles);
+        this.logger.debug("result", res.list[1].contents);
+        this.tiles.push({
+          text: this.getDecsFromLangCode(res.list[0].language.toString()),
+          cols: 4,
+          rows: 1,
+          color: 'lightgreen'
+        })
+        this.tiles.push({
+          text: this.getDecsFromLangCode(res.list[1].language.toString()),
+          cols: 4,
+          rows: 1,
+          color: 'lightpink'
+        })
+        for (var _i = 1; _i <= sum; _i++) {
+          let key: string = _i.toString();
+
+          if (res.list[0].titles.hasOwnProperty(key)) {
+            this.tiles.push({text: res.list[0].titles[key], cols: 4, rows: 1, color: 'lightblue'})
+          } else {
+            this.tiles.push({text: res.list[0].contents[key], cols: 2, rows: 1, color: 'lightgreen'})
+            this.tiles.push({text: res.list[1].contents[key], cols: 2, rows: 1, color: 'lightpink'})
+          }
+        }
+      }, (event: HttpEvent<ResultListSegItem>) => {
+        console.log(event);
+        switch (event.type) {
+          case HttpEventType.Sent:
+            this.showSpinner = true;
+            console.log('Request sent!');
+            break;
+          case HttpEventType.ResponseHeader:
+            console.log('Response header received!');
+            break;
+          case HttpEventType.UploadProgress:
+            const percentDone = Math.round(100 * event.loaded / event.total);
+            console.log(`File is ${percentDone}% uploaded.`);
+          case HttpEventType.DownloadProgress:
+            const kbLoaded = Math.round(event.loaded / 1024);
+            console.log(`Download in progress! ${kbLoaded}Kb loaded`);
+            break;
+          case HttpEventType.Response:
+            console.log('😺 Done!', event.body);
+            this.showSpinner = false;
+        }
+      }
+    )
+  }
+
+  showSpinner = false;
+  tiles: Tile[] = [
+    // {text: 'One', cols: 4, rows: 1, color: 'lightblue'},
+    // {text: 'Two', cols: 2, rows: 1, color: 'lightgreen'},
+    // {text: 'Three', cols: 2, rows: 1, color: 'lightpink'},
+    // {text: 'Four', cols: 4, rows: 1, color: '#DDBDF1'},
+  ];
+}
+
+export interface Tile {
+  color: string;
+  cols: number;
+  rows: number;
+  text: string;
 }

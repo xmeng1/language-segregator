@@ -56,6 +56,29 @@
   </mat-chip-list>
 </mat-form-field>
 
+<button mat-raised-button color="accent" (click)="analysis()">Start to analysis</button>
+<mat-card *ngIf="showSpinner">
+  <mat-card-content>
+    <h2 class="example-h2">Waiting for the response</h2>
+    <section class="example-section">
+      <mat-progress-bar
+        class="example-margin"
+        [color]="'primary'"
+        [mode]="'indeterminate'">
+      </mat-progress-bar>
+    </section>
+  </mat-card-content>
+</mat-card>
+<mat-grid-list cols="4" rowHeight="100px">
+  <mat-grid-tile
+    *ngFor="let tile of tiles"
+    [colspan]="tile.cols"
+    [rowspan]="tile.rows"
+    [style.background]="tile.color">
+    {{tile.text}}
+  </mat-grid-tile>
+</mat-grid-list>
+
 
 <router-outlet></router-outlet>
 

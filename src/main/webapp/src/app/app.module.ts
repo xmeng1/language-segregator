@@ -11,6 +11,10 @@ import {ApiModule, Configuration, ConfigurationParameters} from './segregator-ts
 import {HttpClientModule} from '@angular/common/http';
 import {LoggerModule, NgxLoggerLevel} from 'ngx-logger';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
+import {MatExpansionModule} from '@angular/material/expansion';
+import {MatGridListModule} from '@angular/material/grid-list';
+import {MatProgressBarModule} from '@angular/material/progress-bar';
+import {MatCardModule} from '@angular/material/card';
 // configuring providers
 
 // export function apiConfigFactory(): Configuration => {
@@ -32,6 +36,10 @@ import {MatAutocompleteModule} from '@angular/material/autocomplete';
     MatChipsModule,
     MatAutocompleteModule,
     MatIconModule,
+    MatExpansionModule,
+    MatGridListModule,
+    MatProgressBarModule,
+    MatCardModule,
     FormsModule,
     ReactiveFormsModule,
     BrowserAnimationsModule,
