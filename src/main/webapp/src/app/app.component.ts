@@ -312,8 +312,9 @@ totalCommitCount: "29"
 
   openDialog(): void {
     const dialogRef = this.dialog.open(AboutDialog, {
-      width: '250px',
-      data: {name: "xx", animal: "yy"}
+      // height: '400px',
+      // width: '600px',
+      // data: {name: "xx", animal: "yy"}
     });
 
     dialogRef.afterClosed().subscribe(result => {

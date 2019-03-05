@@ -7,7 +7,7 @@ import {MatButtonModule, MatChipsModule, MatSelectModule, MatIconModule} from '@
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MatFileUploadModule} from 'angular-material-fileupload';
-import {ApiModule, Configuration, ConfigurationParameters} from './segregator-ts-api';
+import {ApiModule, BASE_PATH, Configuration, ConfigurationParameters} from './segregator-ts-api';
 import {HttpClientModule} from '@angular/common/http';
 import {LoggerModule, NgxLoggerLevel} from 'ngx-logger';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
@@ -17,6 +17,7 @@ import {MatProgressBarModule} from '@angular/material/progress-bar';
 import {MatCardModule} from '@angular/material/card';
 import {MatDialogModule} from '@angular/material/dialog';
 import {MatInputModule} from '@angular/material';
+import {environment} from "../environments/environment";
 // configuring providers
 
 // export function apiConfigFactory(): Configuration => {
@@ -60,7 +61,7 @@ import {MatInputModule} from '@angular/material';
     })
   ],
   entryComponents: [AboutDialog],
-  providers: [],
+  providers: [{ provide: BASE_PATH, useValue: environment.API_BASE_PATH }],
   bootstrap: [AppComponent]
 })
 export class AppModule {
