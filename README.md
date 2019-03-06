@@ -36,7 +36,7 @@ The API can be accessed by using Swagger-UI:
 
 http://localhost:8080/swagger-ui.html
 
-(online version: )
+(online version: https://lang-segregator.herokuapp.com/swagger-ui.html)
 
 ![Swagger-UI-screenshot](/doc/img/api-swagger-ui.png)
 
