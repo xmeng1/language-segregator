@@ -8,11 +8,35 @@ The usage scenarios are as follows:
 
 The translator translates one language to another language in the same document and needs a separate language document.
 
+## Heroku Instance
+
+I have deployed the application to the Heroku (free Dyno):
+
+Webapp: https://lang-segregator.herokuapp.com/
+
+The Swagger-UI: https://lang-segregator.herokuapp.com/swagger-ui.html
+
+So it can be quick checked and reviewed including the detail of API doc.
+
+Because of I am using the free Dyno of Heroku, so the performance has limitation, it cannot process too long file (The request will timeout), **please use the these file to test with this Heroku deployment**:
+
+1. [farsi-english-script-short.rtf](doc/test/farsi-english-script-short.rtf)
+2. [farsi-english-script-short.txt](doc/test/farsi-english-script-short.txt)
+
+### Steps:
+
+1. Download these file above
+2. Choose the file
+3. Select `English` and `Persian` (You can press `E` to navigate to `English` and press `P`twice to navigate to `Persian` quickly)
+4. Click button `Start to analysis`
+
 ## API 
 
 The API can be accessed by using Swagger-UI: 
 
 http://localhost:8080/swagger-ui.html
+
+(online version: )
 
 ![Swagger-UI-screenshot](/doc/img/api-swagger-ui.png)
 
@@ -78,6 +102,35 @@ I use Angular and Material Design implement a basic frontend web app to demo the
 4. Waiting for the result
 
 The app will be deployed on the Heroku.
+
+## How to build and run
+
+The application is based on the Spring Boot and Angular. Meanwhile, I have use the `frontend-maven-plugin` build and copy frontend resource to the target, so run the application in local is very easy with the following command.
+
+The default development port is **8080**, please make sure the port is not listened by other application. After run the command, visit the browser : http://localhost:8080
+
+### Linux/Mac OS
+
+```bash
+./mvnw spring-boot:run
+```
+
+### Windows
+
+```bash
+./mvnw.cmd spring-boot:run
+```
+
+### Separate Backend and Frontend
+
+If you would like to run the backend and frontend separately, just need to run the frontend with default port `9000`.
+
+```bash
+cd src/main/webapp/
+npm start
+```
+
+The Angular development configuration use the default backend url and port: http://localhost:8080
 
 ## Background Technique
 
